@@ -24,7 +24,7 @@ public class EventoController {
         return ResponseEntity.ok(athletes);
     }
 
-    @GetMapping("/modalidade/{modalidade}/atletas")
+    @GetMapping("/modalidade/{modalidade}/atletas") // AJUSTAR
     public ResponseEntity<List<Atleta>> getAtletasPorModalidade(@PathVariable String modalidade) {
         List<Atleta> athletes = eventoService.getAtletasPorModalidade(modalidade);
         return ResponseEntity.ok(athletes);

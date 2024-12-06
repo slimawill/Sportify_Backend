@@ -33,6 +33,22 @@ public class PatrocinadorRepositoryImpl implements PatrocinadorRepository {
     @Override
     public List<Patrocinador> findPatrocinadoresSponsoringAllEventTypes() {
         String sql = "SELECT P.* " +
+                    "FROM SPF_PATROCINADOR P " +
+                    "WHERE NOT EXISTS ( " +
+                    "    SELECT T.TIPO " +
+                    "    FROM SPF_TIPO_EVENTO T " +
+                    "    MINUS " +
+                    "    SELECT TE.TIPO " +
+                    "    FROM SPF_EVENTO E " +
+                    "    JOIN SPF_TIPO_EVENTO TE ON E.ID = TE.EVENTO_ID " +
+                    "    WHERE E.PATROCINADOR_CNPJ = P.CNPJ " +
+                    ")";
+        return jdbcTemplate.query(sql, new PatrocinadorRowMapper());
+    }
+}
+
+
+/* "SELECT P.* " +
                 "FROM SPF_PATROCINADOR P " +
                 "WHERE NOT EXISTS ( " +
                 "    SELECT T.TIPO " +
@@ -41,7 +57,4 @@ public class PatrocinadorRepositoryImpl implements PatrocinadorRepository {
                 "    SELECT E.TIPO " +
                 "    FROM SPF_EVENTO E " +
                 "    WHERE E.PATROCINADOR_CNPJ = P.CNPJ " +
-                ")";
-        return jdbcTemplate.query(sql, new PatrocinadorRowMapper());
-    }
-}
+                ")"; */
